@@ -19,3 +19,19 @@
 .font {
   font-family: "Ubuntu", sans-serif;
 }
+/* style.css */
+
+/* style.css */
+#imageResults {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+#imageResults img {
+  width: 300px;
+  /* Set your desired width */
+  height: auto;
+  /* This maintains the aspect ratio */
+  margin: 10px;
+  /* Add spacing between images */
+}
