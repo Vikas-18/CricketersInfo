@@ -1,9 +1,8 @@
 let form = document.getElementById("form");
-
 form.addEventListener("submit", function getname(e) {
   e.preventDefault();
   let playername = document.getElementById("cricketername").value;
-  console.log(playername);
+
   fetch(
     `https://unofficial-cricbuzz.p.rapidapi.com/players/search?plrN=${playername}`,
     {
@@ -16,7 +15,6 @@ form.addEventListener("submit", function getname(e) {
   )
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
       let id = data.player[0].id;
       fetch(
         `https://unofficial-cricbuzz.p.rapidapi.com/players/get-info?playerId=${id}`,
@@ -31,7 +29,6 @@ form.addEventListener("submit", function getname(e) {
       )
         .then((response) => response.json())
         .then((data) => {
-          console.log(data);
           let playerimg = document.getElementById("playerimg");
           playerimg.src = `${data.image}`;
 
@@ -90,6 +87,40 @@ form.addEventListener("submit", function getname(e) {
           let bio = document.getElementById("bio");
           bio.innerHTML = "";
           bio.innerHTML = `<b>Biography:</b> ${data.bio}`;
+          const url = `https://google-search72.p.rapidapi.com/imagesearch?q=${playername}&gl=us&lr=lang_en&num=10&start=0`;
+          const options = {
+            method: "GET",
+            headers: {
+              "X-RapidAPI-Key":
+                "b6de29b671msh656afd628389116p121a33jsn8db112d6b133",
+              "X-RapidAPI-Host": "google-search72.p.rapidapi.com",
+            },
+          };
+          const imageResultsDiv = document.getElementById("imageResults");
+          function clearImageResults() {
+            // Clear the existing results
+            while (imageResultsDiv.firstChild) {
+              imageResultsDiv.removeChild(imageResultsDiv.firstChild);
+            }
+          }
+          fetch(url, options)
+            .then((response) => response.json())
+            .then((data) => {
+              clearImageResults();
+              const images = data.items;
+              const imgheading = document.getElementById("images");
+              imgheading.innerHTML = "Images";
+              images.forEach((image) => {
+                const imgElement = document.createElement("img");
+                imgElement.src = image.originalImageUrl;
+                imgElement.alt = image.title;
+
+                const resultDiv = document.createElement("div");
+                resultDiv.appendChild(imgElement);
+
+                imageResultsDiv.appendChild(resultDiv);
+              });
+            });
         });
     });
 });
